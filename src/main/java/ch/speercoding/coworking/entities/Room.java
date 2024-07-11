@@ -1,13 +1,19 @@
 package ch.speercoding.coworking.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "room")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +26,5 @@ public class Room {
     private String location;
     @OneToMany
     private List<Reservation> reservations;
-
-    public Room(Integer maxcapacity, String name, String location, List<Reservation> reservations) {
-        this.maxcapacity = maxcapacity;
-        this.name = name;
-        this.location = location;
-        this.reservations = reservations;
-    }
 
 }
