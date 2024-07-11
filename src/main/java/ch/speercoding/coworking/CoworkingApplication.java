@@ -24,7 +24,7 @@ public class CoworkingApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(UserRepository userRepository, RoomRepository roomRepository, ReservationRepository reservationRepository) {
 		return args -> {
-			User user1 = new User(1L, "Jayl1", "cestlavieOfJay161" ,"info@coworking-space.ch", "Jay", "Burton", Role.ADMIN);
+			User user1 = new User(1L, "Jayl1", "$2y$10$h.vpFr0sEU422JQBOV3AluBLEIJviVGN4GMCblxla6iukO0qcrK3O" ,"info@coworking-space.ch", "Jay", "Burton", Role.ADMIN);
 			userRepository.save(user1);
 			Room room1 = new Room(1L, 20, "Grünerraum", "Bederstrasse 1, 8000 Zürich", new ArrayList<>());
 			roomRepository.save(room1);
