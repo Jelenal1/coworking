@@ -22,7 +22,7 @@ public class Reservation {
     private LocalDateTime endTime;
     @ManyToOne
     @JoinColumn(referencedColumnName = "user_id")
-    private User booker;
+    private User user;
     private boolean stornated;
 
 
