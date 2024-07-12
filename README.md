@@ -4,6 +4,6 @@
 - Docker
 
 ## Building
-To run this project you have to run the docker compose file with:
-`` docker compose up ``
+To run this project you have to run the docker compose file with: \n
+`` docker compose up `` \n
 Then run the project with JDK 17
