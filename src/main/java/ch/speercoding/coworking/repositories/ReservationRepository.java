@@ -8,7 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @RepositoryRestResource(path = "reservations")
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    /*
+
     @Override
     @PreAuthorize("hasRole('ADMIN') or #entity.user.username == authentication.name")
     <S extends Reservation> S save(S entity);
@@ -27,5 +27,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
                 .orElse(false);
     }
 
-     */
+
 }
