@@ -5,6 +5,8 @@ import ch.speercoding.coworking.entities.User;
 import ch.speercoding.coworking.repositories.UserRepository;
 import ch.speercoding.coworking.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.passay.PasswordData;
+import org.passay.PasswordValidator;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,8 +21,14 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final PasswordValidator passwordValidator;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            throw new BadCredentialsException("Passwords do not match");
+        }
+        passwordValidator.validate(new PasswordData(request.getPassword()));
+
         var user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))

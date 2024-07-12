@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "reservation_id")
     private Long id;
     @Column(nullable = false)
     private LocalDateTime startTime;
@@ -24,6 +25,7 @@ public class Reservation {
     @JoinColumn(referencedColumnName = "user_id")
     private User user;
     private boolean stornated;
+    private boolean approved;
 
 
 }

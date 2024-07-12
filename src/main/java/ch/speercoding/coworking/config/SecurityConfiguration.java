@@ -1,11 +1,10 @@
-package ch.speercoding.coworking.security;
+package ch.speercoding.coworking.config;
 
-import jakarta.servlet.Filter;
+import ch.speercoding.coworking.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -17,7 +16,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,23 +30,31 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-      return http
-              .cors(cors -> cors.configurationSource(corsConfigSource()))
-              .csrf(AbstractHttpConfigurer::disable)
-               .authorizeHttpRequests(auth -> auth
-                       .requestMatchers(
-                               new AntPathRequestMatcher("/auth/login", "POST"),
-                               new AntPathRequestMatcher("/auth/register", "POST")
-                       ).permitAll()
-                       .anyRequest().authenticated()
-               )
-              .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-              .authenticationProvider(authenticationProvider)
-              .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-              .build();
-   }
+        return http
+                .cors(cors -> cors.configurationSource(corsConfigSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/auth/login", "POST"),
+                                new AntPathRequestMatcher("/auth/register", "POST"),
+                                new AntPathRequestMatcher("/api/**", "GET"),
+                                new AntPathRequestMatcher("/rooms/**", "GET")
+                        ).permitAll()
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/rooms/**", "DELETE"),
+                                new AntPathRequestMatcher("/rooms/**", "POST"),
+                                new AntPathRequestMatcher("/rooms/**", "PUT"),
+                                new AntPathRequestMatcher("/reservations/**", "DELETE")
+                        ).hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
+    }
 
-   @Bean
+    @Bean
     public CorsConfigurationSource corsConfigSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
@@ -59,6 +65,6 @@ public class SecurityConfiguration {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-       return source;
-   }
+        return source;
+    }
 }

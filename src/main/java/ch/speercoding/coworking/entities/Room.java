@@ -17,6 +17,7 @@ import java.util.List;
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "room_id")
     private Long id;
     @Column(nullable = false)
     private Integer maxcapacity;
@@ -24,7 +25,7 @@ public class Room {
     private String name;
     @Column(nullable = false)
     private String location;
-    @OneToMany
+    @OneToMany()
     private List<Reservation> reservations;
 
 }
