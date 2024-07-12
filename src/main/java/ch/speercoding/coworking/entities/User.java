@@ -7,7 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
@@ -33,6 +36,7 @@ public class User implements UserDetails  {
     private String firstName;
     @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -40,6 +44,19 @@ public class User implements UserDetails  {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.password = passwordEncoder.encode(password);
+    }
+
+    public void setRole(Role role) {
+        boolean isAdmin = SecurityContextHolder.getContext().getAuthentication()
+                .getAuthorities().stream()
+                .anyMatch(grantedAuthority -> !grantedAuthority.getAuthority().isBlank() && grantedAuthority.getAuthority().equals("ADMIN"));
+        if (isAdmin) this.role = role;
+        else this.role = Role.MEMBER;
     }
 
     @Override
