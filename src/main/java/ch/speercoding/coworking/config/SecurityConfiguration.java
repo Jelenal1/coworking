@@ -38,7 +38,8 @@ public class SecurityConfiguration {
                                 new AntPathRequestMatcher("/auth/login", "POST"),
                                 new AntPathRequestMatcher("/auth/register", "POST"),
                                 new AntPathRequestMatcher("/api/**", "GET"),
-                                new AntPathRequestMatcher("/rooms/**", "GET")
+                                new AntPathRequestMatcher("/rooms/**", "GET"),
+                                new AntPathRequestMatcher("/rooms", "GET")
                         ).permitAll()
                         .requestMatchers(
                                 new AntPathRequestMatcher("/rooms/**", "DELETE"),
